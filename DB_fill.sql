@@ -49,7 +49,7 @@ INSERT INTO Runs(RunNumber, Company, BusCapacity)
                 ('В-269',   2,       60         ),  -- 9
                 ('СП-248',  1,       52         );  -- 10
 
-INSERT INTO Schedule(Run, Station, Arrival,               Departure            )
+INSERT INTO Stops(Run, Station, Arrival,               Departure            )
               VALUES(1,   1,       NULL,                  '2017-02-28 09:00:00'),  -- 1
                     (1,   2,       '2017-02-28 12:00:00', '2017-02-28 12:15:00'),  -- 2
                     (1,   3,       '2017-02-28 18:00:00', '2017-02-28 18:15:00'),  -- 3
@@ -108,7 +108,7 @@ INSERT INTO Schedule(Run, Station, Arrival,               Departure            )
                     (10,  16,      '2017-03-07 21:00:00', '2017-03-07 21:15:00'),  -- 47
                     (10,  1,       '2017-03-08 01:00:00', NULL                 );  -- 48
 
-INSERT INTO Costs(`From`, `To`, Price)
+INSERT INTO Parts(`From`, `To`, Price)
            VALUES(1,      2,    600  ),  -- 1
                  (1,      3,    800  ),  -- 2
                  (1,      4,    1000 ),  -- 3

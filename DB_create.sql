@@ -1,5 +1,6 @@
 DROP DATABASE IF EXISTS Bus_station;
-CREATE DATABASE Bus_station;
+CREATE DATABASE Bus_station
+CHARACTER SET 'utf8';
 
 USE Bus_station;
 
@@ -30,7 +31,7 @@ CREATE TABLE Runs(
 	BusCapacity INTEGER NOT NULL
 );
 
-CREATE TABLE Schedule(
+CREATE TABLE Stops(
 	`Stop` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	Run INTEGER NOT NULL REFERENCES Runs(Run) ON DELETE CASCADE ON UPDATE CASCADE,
 	Station INTEGER NOT NULL REFERENCES Stations(Station) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -44,12 +45,12 @@ CREATE TABLE Schedule(
 
 DELIMITER //
 CREATE TRIGGER IntersectElimination
-BEFORE INSERT ON Schedule
+BEFORE INSERT ON Stops
 FOR EACH ROW
 BEGIN
 	IF EXISTS (
 		SELECT *
-		FROM Schedule s
+		FROM Stops s
 		WHERE NEW.Run = s.Run
 			  AND (
           s.Arrival IS NULL AND NEW.Arrival <= s.Departure OR
@@ -74,18 +75,18 @@ DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER SingleSourceAndDest
-AFTER INSERT ON Schedule
+AFTER INSERT ON Stops
 FOR EACH ROW
 BEGIN
 	IF (
 		NEW.Arrival IS NULL AND (
 			SELECT COUNT(*)
-            FROM Schedule
+            FROM Stops
             WHERE Arrival IS NULL AND Run = NEW.Run
         ) != 1 OR
 		NEW.Departure IS NULL AND (
 			SELECT COUNT(*)
-            FROM Schedule
+            FROM Stops
             WHERE Departure IS NULL AND Run = NEW.Run
         ) != 1
     ) THEN
@@ -94,24 +95,24 @@ BEGIN
 END//
 DELIMITER ;
 
-CREATE TABLE Costs(
-	Cost INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `From` INTEGER NOT NULL REFERENCES Schedule(`Stop`) ON DELETE CASCADE ON UPDATE CASCADE,
-    `To` INTEGER NOT NULL REFERENCES Schedule(`Stop`) ON DELETE CASCADE ON UPDATE CASCADE,
-    Price INTEGER NOT NULL,
+CREATE TABLE Parts(
+	Part INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `From` INTEGER NOT NULL REFERENCES Stops(`Stop`) ON DELETE CASCADE ON UPDATE CASCADE,
+    `To` INTEGER NOT NULL REFERENCES Stops(`Stop`) ON DELETE CASCADE ON UPDATE CASCADE,
+    Price DECIMAL(8,2) NOT NULL,
     
     UNIQUE (`From`, `To`)
 );
 
 DELIMITER //
 CREATE TRIGGER SameRuns_AND_ToGraterThanFrom
-AFTER INSERT ON Costs
+AFTER INSERT ON Parts
 FOR EACH ROW
 BEGIN
 	IF NOT EXISTS (
 			SELECT *
-			FROM Schedule f JOIN
-				 Schedule t ON f.Run = t.Run AND
+			FROM Stops f JOIN
+				 Stops t ON f.Run = t.Run AND
 							   f.Stop = NEW.From AND
                                t.Stop = NEW.To AND
 							   (f.Arrival IS NULL OR t.Departure IS NULL OR f.Arrival < t.Arrival)
@@ -124,9 +125,9 @@ DELIMITER ;
 CREATE TABLE Orders(
 	`Order` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	Client INTEGER NOT NULL REFERENCES Clients(Client) ON DELETE CASCADE ON UPDATE CASCADE,
-	Part INTEGER NOT NULL REFERENCES Costs(Cost) ON DELETE RESTRICT ON UPDATE RESTRICT,
+	Part INTEGER NOT NULL REFERENCES Parts(Part) ON DELETE RESTRICT ON UPDATE RESTRICT,
     Count INTEGER NOT NULL DEFAULT 1,
-    Price INTEGER NOT NULL
+    Price DECIMAL(8,2) NOT NULL
 );
 
 DELIMITER //
@@ -138,8 +139,8 @@ BEGIN
     THEN
 		SET NEW.Price = (
 			SELECT Price
-            FROM Costs
-            WHERE Cost = NEW.Part
+            FROM Parts
+            WHERE Part = NEW.Part
         );
 	END IF;
 END//

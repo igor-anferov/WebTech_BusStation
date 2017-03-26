@@ -1,0 +1,89 @@
+package net.proselyte.hibernate.bus_station.model;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity(name = "Run")
+@Table(name = "Runs")
+public class Run {
+
+    @Id
+    @Column(name = "Run")
+    @GeneratedValue
+    private Integer id;
+    @Column(name = "RunNumber")
+    private String number;
+    @ManyToOne
+    private Company company;
+    private Integer busCapacity;
+    @OneToMany(mappedBy = "run", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Stop> stops = new ArrayList<>();
+
+    public Run() {
+    }
+
+    public Run(String number, Company company, Integer busCapacity) {
+        this.number = number;
+        this.company = company;
+        this.busCapacity = busCapacity;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public Integer getBusCapacity() {
+        return busCapacity;
+    }
+
+    public void setBusCapacity(Integer busCapacity) {
+        this.busCapacity = busCapacity;
+    }
+
+    public List<Stop> getStops() {
+        return stops;
+    }
+
+    public void addStop(Stop stop) {
+        stops.add( stop );
+        stop.setRun( this );
+    }
+
+    public void removeOrder(Stop stop) {
+        stops.remove( stop );
+        stop.setRun( null );
+    }
+
+    @Override
+    public String toString() {
+        return "Run{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", company=" + company +
+                ", busCapacity=" + busCapacity +
+                '}';
+    }
+}
