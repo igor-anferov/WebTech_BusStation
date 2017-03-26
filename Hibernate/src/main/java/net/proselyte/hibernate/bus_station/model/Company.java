@@ -12,7 +12,8 @@ public class Company {
 
     @Id
     @Column(name = "Company")
-    @GeneratedValue
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     @Column(name = "CompanyName")
     private String name;

@@ -12,11 +12,14 @@ import java.util.List;
 public class Part {
     @Id
     @Column(name = "Part")
-    @GeneratedValue
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     @ManyToOne
+    @JoinColumn(name="From")
     private Stop from;
     @ManyToOne
+    @JoinColumn(name="To")
     private Stop to;
     @Column(precision=8, scale=2)
     private BigDecimal price;

@@ -10,12 +10,15 @@ import java.math.BigDecimal;
 public class Order {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     @Column(name = "Order")
     private Integer id;
     @ManyToOne
+    @JoinColumn(name="Client")
     private Client client;
     @ManyToOne
+    @JoinColumn(name="Part")
     private Part part;
     private Integer count;
     @Column(precision=8, scale=2)

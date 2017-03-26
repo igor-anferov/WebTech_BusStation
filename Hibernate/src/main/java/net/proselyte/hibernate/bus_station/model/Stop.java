@@ -12,11 +12,14 @@ import java.util.List;
 public class Stop {
     @Id
     @Column(name = "Stop")
-    @GeneratedValue
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     @ManyToOne
+    @JoinColumn(name="Run")
     private Run run;
     @ManyToOne
+    @JoinColumn(name="Station")
     private Station station;
     @Temporal(TemporalType.TIMESTAMP)
     private Date arrival;

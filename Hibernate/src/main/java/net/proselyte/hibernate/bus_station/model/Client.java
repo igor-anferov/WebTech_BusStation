@@ -12,7 +12,8 @@ public class Client {
 
     @Id
     @Column(name = "Client")
-    @GeneratedValue
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     private String firstName;
     private String lastName;

@@ -12,7 +12,8 @@ public class Station {
 
     @Id
     @Column(name = "Station")
-    @GeneratedValue
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     @Column(name = "StationName")
     private String name;

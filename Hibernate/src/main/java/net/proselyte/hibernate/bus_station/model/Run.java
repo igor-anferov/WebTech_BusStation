@@ -12,11 +12,13 @@ public class Run {
 
     @Id
     @Column(name = "Run")
-    @GeneratedValue
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     @Column(name = "RunNumber")
     private String number;
     @ManyToOne
+    @JoinColumn(name="Company")
     private Company company;
     private Integer busCapacity;
     @OneToMany(mappedBy = "run", cascade = CascadeType.ALL, orphanRemoval = true)
