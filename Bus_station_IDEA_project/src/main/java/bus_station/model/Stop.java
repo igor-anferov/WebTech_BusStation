@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "Stops")
 public class Stop {
     @Id
-    @Column(name = "Stop")
+    @Column(name = "Stop_")
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;

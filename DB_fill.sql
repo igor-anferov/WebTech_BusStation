@@ -108,7 +108,7 @@ INSERT INTO Stops(Run, Station, Arrival,               Departure            )
                     (10,  16,      '2017-03-07 21:00:00', '2017-03-07 21:15:00'),  -- 47
                     (10,  1,       '2017-03-08 01:00:00', NULL                 );  -- 48
 
-INSERT INTO Parts(`From`, `To`, Price)
+INSERT INTO Parts(From_, To_, Price)
            VALUES(1,      2,    600  ),  -- 1
                  (1,      3,    800  ),  -- 2
                  (1,      4,    1000 ),  -- 3
@@ -215,7 +215,7 @@ INSERT INTO Parts(`From`, `To`, Price)
                  (46,     48,   800  ),  -- 95
                  (47,     48,   600  );  -- 96
 
-INSERT INTO Orders(`Client`, Part, Count)
+INSERT INTO Orders(Client, Part, Count)
             VALUES(1,        3,    25   ),  -- 1
                   (1,        9,    25   ),  -- 2
                   (1,        14,   22   ),  -- 3

@@ -16,10 +16,10 @@ public class Part {
     @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     @ManyToOne
-    @JoinColumn(name="From")
+    @JoinColumn(name="From_")
     private Stop from;
     @ManyToOne
-    @JoinColumn(name="To")
+    @JoinColumn(name="To_")
     private Stop to;
     @Column(precision=8, scale=2)
     private BigDecimal price;

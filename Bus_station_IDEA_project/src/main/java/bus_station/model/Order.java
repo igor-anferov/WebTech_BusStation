@@ -12,7 +12,7 @@ public class Order {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "Order")
+    @Column(name = "Order_")
     private Integer id;
     @ManyToOne
     @JoinColumn(name="Client")

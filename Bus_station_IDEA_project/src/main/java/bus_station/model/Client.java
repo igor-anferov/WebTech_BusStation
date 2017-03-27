@@ -107,6 +107,21 @@ public class Client {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Client client = (Client) o;
+
+        return telephone.equals(client.telephone);
+    }
+
+    @Override
+    public int hashCode() {
+        return telephone.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +

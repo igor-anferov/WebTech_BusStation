@@ -1,7 +1,9 @@
 package bus_station;
 
+import bus_station.DAO.Clients;
 import bus_station.model.Client;
 import bus_station.model.Order;
+import bus_station.model.Part;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -10,38 +12,44 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 public class Main {
+    public static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
+    public static EntityManager entityManager = entityManagerFactory.createEntityManager();
     public static void main(String[] args) {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-//        entityManager.getTransaction().begin();
-//        List<Client> clients = entityManager.createQuery( "from Client", Client.class ).getResultList();
-//        for (Client client : clients) {
-//            System.out.println(client);
-//        }
-//        System.out.println("===================================");
-//        entityManager.getTransaction().commit();
-//
-//        entityManager.getTransaction().begin();
-//        entityManager.persist( new Client(
-//                "Игорь",
-//                "Анфёров",
-//                "Сергеевич",
-//                "Lomonosovsky pr-t, 27k11",
-//                "+79996662401",
-//                "igor-anferov@mail.ru"
-//        ) );
-//        entityManager.getTransaction().commit();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        entityManager.getTransaction().begin();
+        Clients.list().forEach(System.out::println);
+        entityManager.getTransaction().commit();
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+        Client Igor = new Client(
+                "Игорь",
+                "Анфёров",
+                "Сергеевич",
+                "Ломоносовский пр-т, 27к11",
+                "+79996662401",
+                "igor-anferov@mail.ru");
 
         entityManager.getTransaction().begin();
-        List<Client> clients1 = entityManager.createQuery( "from Client", Client.class ).getResultList();
-        System.out.println(clients1.get(4));
-        List<Order> orders = clients1.get(4).getOrders();
-        for (Order order : orders) {
-            System.out.println(order);
-        }
-        System.out.println("===================================");
+        Clients.add(Igor);
+        Igor.addOrder(new Order(Igor, entityManager.find(Part.class, 8), 1));
         entityManager.getTransaction().commit();
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        entityManager.getTransaction().begin();
+        Clients.list().forEach(System.out::println);
+        entityManager.getTransaction().commit();
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+//        entityManager.getTransaction().begin();
+//        Igor.setAddress("Ломоносовский пр-т, 27к11");
+//        entityManager.getTransaction().commit();
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        entityManager.getTransaction().begin();
+        Clients.getByCompany("Мострансавто").forEach(System.out::println);
+        entityManager.getTransaction().commit();
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
         entityManager.close();
         entityManagerFactory.close();
