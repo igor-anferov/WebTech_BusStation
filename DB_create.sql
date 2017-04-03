@@ -145,3 +145,43 @@ BEGIN
 	END IF;
 END//
 DELIMITER ;
+
+CREATE VIEW Parts_with_free_space
+AS SELECT Runs.Run, Parts.Part, CompanyName, RunNumber, fs.StationName as From_, ts.StationName as To_, f.Departure, t.Arrival, Parts.Price, BusCapacity-SUM(IFNULL(Count, 0)) as Free
+FROM Companies JOIN
+     Runs ON Runs.Company = Companies.Company JOIN
+     Stops as f ON Runs.Run = f.Run JOIN
+     Stops as t ON Runs.Run = t.Run JOIN
+     Parts ON From_ = f.Stop_ AND To_ = t.Stop_ JOIN
+     Stations as fs ON f.Station = fs.Station JOIN
+     Stations as ts ON t.Station = ts.Station JOIN
+	 Stops as fc ON fc.Run = Runs.Run JOIN
+	 Stops as tc ON fc.Run = Runs.Run AND NOT (tc.Arrival <= f.Departure OR fc.Departure >= t.Arrival) JOIN
+     Parts as pc ON pc.From_ = fc.Stop_ AND pc.To_ = tc.Stop_ LEFT JOIN
+     Orders ON Orders.Part = pc.Part
+GROUP BY Run, Part, CompanyName, RunNumber, From_, To_, Departure, Arrival, Price
+
+DELIMITER //
+CREATE TRIGGER BusOverflow
+BEFORE INSERT ON Orders
+FOR EACH ROW
+BEGIN
+	DECLARE x integer;
+    
+	SELECT BusCapacity-SUM(IFNULL(Orders.Count, 0))-new.Count INTO x
+	FROM Runs JOIN
+		 Stops as f ON Runs.Run = f.Run JOIN
+		 Stops as t ON Runs.Run = t.Run JOIN
+		 Parts ON From_ = f.Stop_ AND To_ = t.Stop_ AND Parts.Part = new.Part JOIN
+		 Stations as fs ON f.Station = fs.Station JOIN
+		 Stations as ts ON t.Station = ts.Station JOIN
+		 Stops as fc ON fc.Run = Runs.Run JOIN
+		 Stops as tc ON fc.Run = Runs.Run AND NOT (tc.Arrival <= f.Departure OR fc.Departure >= t.Arrival) JOIN
+		 Parts as pc ON pc.From_ = fc.Stop_ AND pc.To_ = tc.Stop_ LEFT JOIN
+		 Orders ON Orders.Part = pc.Part;
+				
+	IF ( x < 0 ) THEN
+		SIGNAL SQLSTATE '44444';
+	END IF;
+END//
+DELIMITER ;
