@@ -23,6 +23,8 @@ public class Part {
     private Stop to;
     @Column(precision=8, scale=2)
     private BigDecimal price;
+    @OneToOne(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private FreeSeats freeSeats;
     @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
@@ -71,6 +73,10 @@ public class Part {
         return orders;
     }
 
+    public Integer getFreeSeats() {
+        return freeSeats.getFree();
+    }
+
     public void addOrder(Order order) {
         orders.add( order );
         order.setPart( this );
@@ -88,6 +94,7 @@ public class Part {
                 ", from=" + from +
                 ", to=" + to +
                 ", price=" + price +
+                ", freeSeats=" + freeSeats.getFree() +
                 '}';
     }
 }

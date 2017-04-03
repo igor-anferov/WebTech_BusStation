@@ -16,11 +16,11 @@ public class Main {
     public static EntityManager entityManager = entityManagerFactory.createEntityManager();
     public static void main(String[] args) {
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        entityManager.getTransaction().begin();
-        Clients.list().forEach(System.out::println);
-        entityManager.getTransaction().commit();
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        entityManager.getTransaction().begin();
+//        Clients.list().forEach(System.out::println);
+//        entityManager.getTransaction().commit();
+//        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
         Client Igor = new Client(
                 "Игорь",
@@ -32,24 +32,24 @@ public class Main {
 
         entityManager.getTransaction().begin();
         Clients.add(Igor);
-        Igor.addOrder(new Order(Igor, entityManager.find(Part.class, 8), 1));
+        Igor.addOrder(new Order(Igor, entityManager.find(Part.class, 8), 10));
         entityManager.getTransaction().commit();
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         entityManager.getTransaction().begin();
-        Clients.list().forEach(System.out::println);
+        Igor.getOrders().forEach(System.out::println);
         entityManager.getTransaction().commit();
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-
+//
 //        entityManager.getTransaction().begin();
-//        Igor.setAddress("Ломоносовский пр-т, 27к11");
+//        Igor.addOrder(new Order(Igor, entityManager.find(Part.class, 8), 1));
 //        entityManager.getTransaction().commit();
-
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        entityManager.getTransaction().begin();
-        Clients.getByCompany("Мострансавто").forEach(System.out::println);
-        entityManager.getTransaction().commit();
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+//
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        entityManager.getTransaction().begin();
+//        Clients.find(null,null,null,null,null,null,true).forEach(System.out::println);
+//        entityManager.getTransaction().commit();
+//        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
         entityManager.close();
         entityManagerFactory.close();

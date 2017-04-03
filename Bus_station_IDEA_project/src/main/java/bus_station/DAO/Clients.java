@@ -15,14 +15,15 @@ import java.util.List;
 
 public class Clients {
 
-    static public List<Client> find(String firstName, String lastName, String patronymic, String address, String telephone, String email) {
+    static public List<Client> find(String firstName, String lastName, String patronymic, String address, String telephone, String email, Boolean not_empty_ord_hist) {
         String queryText = "SELECT c FROM Client c";
         if (firstName != null ||
             lastName  != null ||
             patronymic != null ||
             address != null ||
             telephone != null ||
-            email != null )
+            email != null ||
+            not_empty_ord_hist == true)
             queryText += " WHERE";
         Boolean needAnd = false;
         if (firstName  != null) { queryText += (needAnd ? " AND":"")+" c.firstName  = '" + firstName  + "'"; needAnd = true; }
@@ -31,6 +32,7 @@ public class Clients {
         if (address    != null) { queryText += (needAnd ? " AND":"")+" c.address    = '" + address    + "'"; needAnd = true; }
         if (telephone  != null) { queryText += (needAnd ? " AND":"")+" c.telephone  = '" + telephone  + "'"; needAnd = true; }
         if (email      != null) { queryText += (needAnd ? " AND":"")+" c.email      = '" + email      + "'"; needAnd = true; }
+        if (not_empty_ord_hist == true) { queryText += (needAnd ? " AND":"")+" c.orders IS NOT EMPTY"; needAnd = true; }
         return Main.entityManager.createQuery(queryText).getResultList();
     }
 
@@ -41,7 +43,8 @@ public class Clients {
                 null,
                 null,
                 null,
-                null);
+                null,
+                false);
     }
 
     static public void add(Client c) {
@@ -66,6 +69,8 @@ public class Clients {
     static public List<Client> getByRun (String run_number) {
         return getByRunQuery.setParameter("run_number", run_number).getResultList();
     }
+
+//  Получение списка клиентов, купивших билет на рейс определённой компании
 
     static private Query getByCompanyQuery = Main.entityManager.createQuery(
             "SELECT DISTINCT c " +
