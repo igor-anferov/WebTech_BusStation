@@ -109,6 +109,28 @@ public class Stop {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Stop stop = (Stop) o;
+
+        if (!run.equals(stop.run)) return false;
+        if (!station.equals(stop.station)) return false;
+        if (arrival != null ? !arrival.equals(stop.arrival) : stop.arrival != null) return false;
+        return departure != null ? departure.equals(stop.departure) : stop.departure == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = run.hashCode();
+        result = 31 * result + station.hashCode();
+        result = 31 * result + (arrival != null ? arrival.hashCode() : 0);
+        result = 31 * result + (departure != null ? departure.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Stop{" +
                 "id=" + id +

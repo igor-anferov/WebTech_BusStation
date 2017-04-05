@@ -15,7 +15,7 @@ public class Run {
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
-    @Column(name = "RunNumber")
+    @Column(name = "RunNumber", unique = true, nullable = false)
     private String number;
     @ManyToOne
     @JoinColumn(name="Company")
@@ -77,6 +77,21 @@ public class Run {
     public void removeOrder(Stop stop) {
         stops.remove( stop );
         stop.setRun( null );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Run run = (Run) o;
+
+        return number.equals(run.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return number.hashCode();
     }
 
     @Override

@@ -19,6 +19,7 @@ public class Client {
     private String lastName;
     private String patronymic;
     private String address;
+    @Column(unique = true, nullable = false)
     private String telephone;
     private String email;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)

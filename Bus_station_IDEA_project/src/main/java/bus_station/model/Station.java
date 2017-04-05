@@ -15,7 +15,7 @@ public class Station {
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
-    @Column(name = "StationName")
+    @Column(name = "StationName", unique = true, nullable = false)
     private String name;
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stop> stops = new ArrayList<>();
@@ -56,6 +56,21 @@ public class Station {
     public void removeOrder(Stop stop) {
         stops.remove( stop );
         stop.setStation( null );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Station station = (Station) o;
+
+        return name.equals(station.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
     @Override

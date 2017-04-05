@@ -41,4 +41,26 @@ public class FreeSeats implements Serializable {
     public Integer getFree() {
         return free;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FreeSeats freeSeats = (FreeSeats) o;
+
+        return free.equals(freeSeats.free);
+    }
+
+    @Override
+    public int hashCode() {
+        return free.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "FreeSeats{" +
+                "free=" + free +
+                '}';
+    }
 }

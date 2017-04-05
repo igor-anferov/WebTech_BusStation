@@ -15,7 +15,7 @@ public class Company {
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
-    @Column(name = "CompanyName")
+    @Column(name = "CompanyName", unique = true, nullable = false)
     private String name;
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Run> runs = new ArrayList<>();
@@ -55,6 +55,21 @@ public class Company {
     public void removeRun(Run run) {
         runs.remove( run );
         run.setCompany( null );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Company company = (Company) o;
+
+        return name.equals(company.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
     @Override

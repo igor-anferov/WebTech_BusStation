@@ -16,10 +16,10 @@ public class Part {
     @GenericGenerator(name="increment", strategy = "increment")
     private Integer id;
     @ManyToOne
-    @JoinColumn(name="From_")
+    @JoinColumn(name="From_", nullable = false)
     private Stop from;
     @ManyToOne
-    @JoinColumn(name="To_")
+    @JoinColumn(name="To_", nullable = false)
     private Stop to;
     @Column(precision=8, scale=2)
     private BigDecimal price;
@@ -85,6 +85,24 @@ public class Part {
     public void removeOrder(Order order) {
         orders.remove( order );
         order.setPart( null );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Part part = (Part) o;
+
+        if (!from.equals(part.from)) return false;
+        return to.equals(part.to);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = from.hashCode();
+        result = 31 * result + to.hashCode();
+        return result;
     }
 
     @Override
