@@ -38,7 +38,7 @@ public class Clients {
     }
 
     public List<Client> list() {
-        String queryText = "SELECT c FROM Client c";
+        String queryText = "SELECT c FROM Client c ORDER BY lastName";
         return entityManager.createQuery(queryText).getResultList();
     }
 

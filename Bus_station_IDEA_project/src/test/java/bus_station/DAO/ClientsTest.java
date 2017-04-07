@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 @Test(singleThreaded=true)
 public class ClientsTest {
+
     private EntityManagerFactory entityManagerFactory = null;
     private EntityManager entityManager = null;
 
@@ -55,6 +56,53 @@ public class ClientsTest {
     public void tearDown() throws Exception {
         entityManager.close();
         entityManagerFactory.close();
+    }
+
+    @Test
+    public void testAddListRemove() throws Exception {
+        Clients clients = new Clients(entityManager);
+
+        entityManager.getTransaction().begin();
+        List<Client> l = clients.list();
+        Assert.assertEquals(l.size(), 5);
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        Client igor = new Client("Игорь",
+                "Анфёров",
+                "Сергеевич",
+                "50 лет Октября, 38-6",
+                "+79996662401",
+                "igor-anferov@mail.ru");
+        clients.add(igor);
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = clients.list();
+        Assert.assertEquals(l.size(), 6);
+        Assert.assertEquals(l.get(1).getFirstName(), "Игорь");
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        clients.remove(l.get(1));
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = clients.list();
+        Assert.assertEquals(l.size(), 5);
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = clients.find(
+                "Игорь",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        Assert.assertEquals(l.size(), 0);
+        entityManager.getTransaction().commit();
     }
 
     @Test
@@ -111,10 +159,79 @@ public class ClientsTest {
                 null,
                 null,
                 null,
+                "Хорошева, 39-24",
+                null,
+                null,
+                null);
+        entityManager.getTransaction().commit();
+        Assert.assertEquals(l.size(), 1);
+        Assert.assertEquals(l.get(0), new Client(
+                "Антипов",
+                "Николай",
+                "Андреевич",
+                "Хорошева, 39-24",
+                "+79022345694",
+                "kolya2863@yandex.ru"));
+
+        entityManager.getTransaction().begin();
+        l = clients.find(
+                null,
+                null,
+                null,
+                null,
+                "+79254074876",
+                null,
+                null);
+        entityManager.getTransaction().commit();
+        Assert.assertEquals(l.size(), 1);
+        Assert.assertEquals(l.get(0), new Client(
+                "Нечаева",
+                "Татьяна",
+                "Юрьевна",
+                "50 лет Октября, 27-104",
+                "+79254074876",
+                "nech.tat685@gmail.com"));
+
+        entityManager.getTransaction().begin();
+        l = clients.find(
+                null,
+                null,
+                null,
+                null,
+                null,
+                "storozheva.z11@icloud.com",
+                null);
+        entityManager.getTransaction().commit();
+        Assert.assertEquals(l.size(), 1);
+        Assert.assertEquals(l.get(0), new Client(
+                "Сторожева",
+                "Зоя",
+                "Андреевна",
+                "Володарского, 27а",
+                "+79080481269",
+                "storozheva.z11@icloud.com"));
+
+        entityManager.getTransaction().begin();
+        l = clients.find(
+                null,
+                null,
+                null,
                 null,
                 null,
                 null,
                 false);
+        entityManager.getTransaction().commit();
+        Assert.assertEquals(l.size(), 5);
+
+        entityManager.getTransaction().begin();
+        l = clients.find(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                true);
         entityManager.getTransaction().commit();
         Assert.assertEquals(l.size(), 5);
     }

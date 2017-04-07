@@ -32,17 +32,15 @@ public class Parts {
             queryText +=
                 " JOIN Stop sf ON p.from = sf.id" +
                 " JOIN Stop st ON p.to = st.id" +
-                " JOIN Run r ON sf.run = r.id" +
-                " JOIN Stop si ON si.run = r.id AND si.departure > sf.departure AND si.arrival < st.arrival AND (";
-            Boolean need_OR = false;
+                " JOIN Run r ON sf.run = r.id";
             for (Station stop : stops) {
-                if (need_OR)
-                    queryText += " ||";
-                else
-                    need_OR = true;
-                queryText += " si.station = " + stop.getId();
+                queryText +=
+                    " JOIN Stop si"+ stop.getId() +" ON " +
+                            "si"+ stop.getId() +".run = r.id AND " +
+                            "si"+ stop.getId() +".departure > sf.departure AND " +
+                            "si"+ stop.getId() +".arrival < st.arrival AND " +
+                            "si"+ stop.getId() +".station = "+ stop.getId();
             }
-            queryText += ")";
         }
 
         if (dep_st != null ||
@@ -54,10 +52,7 @@ public class Parts {
         }
 
         if (dep_st != null) {
-            if (need_AND)
-                queryText += " AND";
-            else
-                need_AND = true;
+            need_AND = true;
             queryText += " p.from.station = " + dep_st.getId();
         }
         if (arr_st != null) {

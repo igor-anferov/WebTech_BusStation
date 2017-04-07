@@ -2,7 +2,9 @@ package bus_station.DAO;
 
 import bus_station.ScriptRunner.ScriptRunner;
 import bus_station.model.Part;
+import bus_station.model.Run;
 import bus_station.model.Station;
+import bus_station.model.Stop;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -61,6 +63,53 @@ public class PartsTest {
     }
 
     @Test
+    public void testListAddRemove() throws Exception {
+        Parts parts = new Parts(entityManager);
+        Runs runs = new Runs(entityManager);
+
+        entityManager.getTransaction().begin();
+        List<Part> l = parts.list();
+        Assert.assertEquals(l.size(), 96);
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        parts.remove(l.get(50));
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = parts.list();
+        Assert.assertEquals(l.size(), 95);
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        List<Run> lr = runs.list();
+        Run r7 = null;
+        for (Run run : lr) {
+            if (run.getId()==7) {
+                r7 = run;
+                break;
+            }
+        }
+        Stop s29 = null;
+        Stop s30 = null;
+        for (Stop stop : r7.getStops()) {
+            if (stop.getId() == 29) {
+                s29 = stop;
+            }
+            if (stop.getId() == 30) {
+                s30 = stop;
+            }
+        }
+        parts.add(new Part(s29, s30, new BigDecimal(600)));
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = parts.list();
+        Assert.assertEquals(l.size(), 96);
+        entityManager.getTransaction().commit();
+    }
+
+    @Test
     public void testFindByArrivalAndOthers() throws Exception {
         Parts parts = new Parts(entityManager);
         Stations stations = new Stations(entityManager);
@@ -87,7 +136,9 @@ public class PartsTest {
         Assert.assertEquals(l.size(), 2);
         Assert.assertEquals(l.get(0).getId(), new Integer(36));
         Assert.assertEquals(l.get(1).getId(), new Integer(66));
+        entityManager.getTransaction().commit();
 
+        entityManager.getTransaction().begin();
         l = parts.find(
                 null,
                 null,
@@ -100,6 +151,7 @@ public class PartsTest {
         Assert.assertEquals(l.get(0).getId(), new Integer(19));
         Assert.assertEquals(l.get(1).getId(), new Integer(20));
         Assert.assertEquals(l.get(2).getId(), new Integer(21));
+        entityManager.getTransaction().commit();
     }
 
     @Test
@@ -129,9 +181,107 @@ public class PartsTest {
                 null,
                 null,
                 null);
+        entityManager.getTransaction().commit();
+
         Assert.assertEquals(l.size(), 2);
         Assert.assertEquals(l.get(0).getId(), new Integer(2));
         Assert.assertEquals(l.get(1).getId(), new Integer(3));
+
+        entityManager.getTransaction().begin();
+
+        allStations = stations.list();
+        stops = new ArrayList<>();
+        Station spb = null;
+
+        for (Station station : allStations) {
+            if (station.getName().equals("Санкт-Петербург")) {
+                spb = station;
+            }
+            if (station.getName().equals("Тверь")) {
+                stops.add(station);
+            }
+            if (station.getName().equals("Великий Новгород")) {
+                stops.add(station);
+            }
+        }
+
+        l = parts.find(
+                null,
+                spb,
+                stops,
+                null,
+                null,
+                null);
+        entityManager.getTransaction().commit();
+
+        Assert.assertEquals(l.size(), 1);
+        Assert.assertEquals(l.get(0).getId(), new Integer(3));
+
+        entityManager.getTransaction().begin();
+        l = parts.find(
+                null,
+                null,
+                stops,
+                null,
+                null,
+                null);
+        Assert.assertEquals(l.size(), 2);
+        Assert.assertEquals(l.get(0).getId(), new Integer(3));
+        Assert.assertEquals(l.get(1).getId(), new Integer(9));
+
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = parts.find(
+                msc,
+                spb,
+                stops,
+                null,
+                null,
+                null);
+        Assert.assertEquals(l.size(), 1);
+        Assert.assertEquals(l.get(0).getId(), new Integer(3));
+
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = parts.find(
+                null,
+                spb,
+                null,
+                new GregorianCalendar(2017, Calendar.FEBRUARY, 28, 12, 15,00).getTime(),
+                null,
+                null);
+        Assert.assertEquals(l.size(), 1);
+        Assert.assertEquals(l.get(0).getId(), new Integer(5));
+
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = parts.find(
+                null,
+                null,
+                null,
+                null,
+                new BigDecimal(600),
+                30);
+        Assert.assertEquals(l.size(), 6);
+
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+        l = parts.find(
+                null,
+                null,
+                null,
+                null,
+                null,
+                60);
+        Assert.assertEquals(l.size(), 4);
+
+        entityManager.getTransaction().commit();
+
+
     }
 
 }

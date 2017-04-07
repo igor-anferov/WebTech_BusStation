@@ -23,7 +23,7 @@ public class Part {
     private Stop to;
     @Column(precision=8, scale=2)
     private BigDecimal price;
-    @OneToOne(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "part", cascade={CascadeType.REFRESH, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.LAZY)
     private FreeSeats freeSeats;
     @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
