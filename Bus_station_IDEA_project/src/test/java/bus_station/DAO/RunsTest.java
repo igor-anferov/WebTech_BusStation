@@ -1,6 +1,7 @@
 package bus_station.DAO;
 
 import bus_station.ScriptRunner.ScriptRunner;
+import bus_station.model.Company;
 import bus_station.model.Run;
 import bus_station.model.Stop;
 import org.testng.Assert;
@@ -57,6 +58,33 @@ public class RunsTest {
     public void tearDown() throws Exception {
         entityManager.close();
         entityManagerFactory.close();
+    }
+
+    @Test
+    public void testAddRemoveList() throws Exception {
+        Runs runs = new Runs(entityManager);
+        Companies companies = new Companies(entityManager);
+
+        List<Run> allRuns = runs.list();
+        Assert.assertEquals(allRuns.size(), 10);
+
+        Company comp = companies.list().get(0);
+
+        Run new_run = new Run("NEW-001", comp, 60);
+
+        entityManager.getTransaction().begin();
+        runs.add(new_run);
+        entityManager.getTransaction().commit();
+
+        allRuns = runs.list();
+        Assert.assertEquals(allRuns.size(), 11);
+
+        entityManager.getTransaction().begin();
+        runs.remove(new_run);
+        entityManager.getTransaction().commit();
+
+        allRuns = runs.list();
+        Assert.assertEquals(allRuns.size(), 10);
     }
 
     @Test
