@@ -80,12 +80,21 @@ public class Order {
 
         Order order = (Order) o;
 
-        return id.equals(order.id);
+        if (id != null ? !id.equals(order.id) : order.id != null) return false;
+        if (client != null ? !client.equals(order.client) : order.client != null) return false;
+        if (part != null ? !part.equals(order.part) : order.part != null) return false;
+        if (count != null ? !count.equals(order.count) : order.count != null) return false;
+        return price != null ? price.equals(order.price) : order.price == null;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (client != null ? client.hashCode() : 0);
+        result = 31 * result + (part != null ? part.hashCode() : 0);
+        result = 31 * result + (count != null ? count.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        return result;
     }
 
     @Override

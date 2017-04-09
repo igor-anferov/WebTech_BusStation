@@ -74,7 +74,7 @@ public class Run {
         stop.setRun( this );
     }
 
-    public void removeOrder(Stop stop) {
+    public void removeStop(Stop stop) {
         stops.remove( stop );
         stop.setRun( null );
     }
@@ -86,12 +86,19 @@ public class Run {
 
         Run run = (Run) o;
 
-        return number.equals(run.number);
+        if (id != null ? !id.equals(run.id) : run.id != null) return false;
+        if (number != null ? !number.equals(run.number) : run.number != null) return false;
+        if (company != null ? !company.equals(run.company) : run.company != null) return false;
+        return busCapacity != null ? busCapacity.equals(run.busCapacity) : run.busCapacity == null;
     }
 
     @Override
     public int hashCode() {
-        return number.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (company != null ? company.hashCode() : 0);
+        result = 31 * result + (busCapacity != null ? busCapacity.hashCode() : 0);
+        return result;
     }
 
     @Override

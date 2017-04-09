@@ -91,10 +91,14 @@ public class Parts {
     }
 
     public void add(Part p) {
+        p.getFrom().addPartFrom(p);
+        p.getTo().addPartTo(p);
         entityManager.persist(p);
     }
 
     public void remove(Part p) {
+        p.getFrom().removePartFrom(p);
+        p.getTo().removePartTo(p);
         entityManager.remove(p);
     }
 

@@ -16,10 +16,14 @@ public class Stops {
     }
 
     public void add(Stop s) {
+        s.getRun().addStop(s);
+        s.getStation().addStop(s);
         entityManager.persist(s);
     }
 
     public void remove(Stop s) {
+        s.getStation().removeStop(s);
+        s.getRun().removeStop(s);
         entityManager.remove(s);
     }
 }

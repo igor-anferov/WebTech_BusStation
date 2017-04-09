@@ -20,7 +20,7 @@
             <property name="javax.persistence.jdbc.user" value="Hibernate" />
             <property name="javax.persistence.jdbc.password" value="A4h3HzqOOe1kg2vbk4PN" />
 
-            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.hbm2ddl.auto" value="validate" />
         </properties>
 

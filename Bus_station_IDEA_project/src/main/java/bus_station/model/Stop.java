@@ -115,16 +115,16 @@ public class Stop {
 
         Stop stop = (Stop) o;
 
-        if (!run.equals(stop.run)) return false;
-        if (!station.equals(stop.station)) return false;
+        if (run != null ? !run.equals(stop.run) : stop.run != null) return false;
+        if (station != null ? !station.equals(stop.station) : stop.station != null) return false;
         if (arrival != null ? !arrival.equals(stop.arrival) : stop.arrival != null) return false;
         return departure != null ? departure.equals(stop.departure) : stop.departure == null;
     }
 
     @Override
     public int hashCode() {
-        int result = run.hashCode();
-        result = 31 * result + station.hashCode();
+        int result = run != null ? run.hashCode() : 0;
+        result = 31 * result + (station != null ? station.hashCode() : 0);
         result = 31 * result + (arrival != null ? arrival.hashCode() : 0);
         result = 31 * result + (departure != null ? departure.hashCode() : 0);
         return result;

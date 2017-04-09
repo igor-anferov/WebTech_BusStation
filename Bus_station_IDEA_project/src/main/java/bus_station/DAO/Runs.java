@@ -25,10 +25,12 @@ public class Runs {
     }
 
     public void add(Run r) {
+        r.getCompany().addRun(r);
         entityManager.persist(r);
     }
 
     public void remove(Run r) {
+        r.getCompany().removeRun(r);
         entityManager.remove(r);
     }
 

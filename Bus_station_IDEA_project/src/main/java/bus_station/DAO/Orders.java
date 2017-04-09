@@ -23,10 +23,14 @@ public class Orders {
     }
 
     public void add(Order o) {
+        o.getClient().addOrder(o);
+        o.getPart().addOrder(o);
         entityManager.persist(o);
     }
 
     public void remove(Order o) {
+        o.getClient().removeOrder(o);
+        o.getPart().removeOrder(o);
         entityManager.remove(o);
     }
 }

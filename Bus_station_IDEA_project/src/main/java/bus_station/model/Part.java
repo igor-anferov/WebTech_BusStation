@@ -94,14 +94,14 @@ public class Part {
 
         Part part = (Part) o;
 
-        if (!from.equals(part.from)) return false;
-        return to.equals(part.to);
+        if (from != null ? !from.equals(part.from) : part.from != null) return false;
+        return to != null ? to.equals(part.to) : part.to == null;
     }
 
     @Override
     public int hashCode() {
-        int result = from.hashCode();
-        result = 31 * result + to.hashCode();
+        int result = from != null ? from.hashCode() : 0;
+        result = 31 * result + (to != null ? to.hashCode() : 0);
         return result;
     }
 

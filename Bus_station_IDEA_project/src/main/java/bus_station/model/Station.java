@@ -53,7 +53,7 @@ public class Station {
         stop.setStation( this );
     }
 
-    public void removeOrder(Stop stop) {
+    public void removeStop(Stop stop) {
         stops.remove( stop );
         stop.setStation( null );
     }

@@ -118,7 +118,7 @@ public class StopsTest {
                 break;
             }
         }
-        Assert.assertEquals(spbMsc.getStops().size(), 5);
+        Assert.assertEquals(spbMsc.getStops().size(), 4);
         entityManager.getTransaction().commit();
     }
 }
