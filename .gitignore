@@ -1,6 +1,4 @@
 .DS_Store
-/Bus_station_project/target/
-/Bus_station_project/.idea/
-/Bus_station_project/lib/
 /Bus_station_project/*
+!/Bus_station_project/src/
 !/Bus_station_project/pom.xml
