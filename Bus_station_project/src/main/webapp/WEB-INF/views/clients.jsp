@@ -37,46 +37,46 @@
         <section>
             <div>
                 <h2>Поиск по номеру рейса</h2>
-                <form name="search" action="#" method="get">
-                    <input class="short" type="text" name="q" placeholder="Номер рейса">
+                <form name="search_by_run_number" method="post" action="/clients/search_by_run_number">
+                    <input class="short" type="text" name="run_number" placeholder="Номер рейса" <c:if test="${run_number != null}"> value="${run_number}" </c:if>>
                     <button type="submit"> Искать 🔎</button>
                 </form>
             </div>
             <div>
                 <h2>Поиск по названию компани, выполняющей рейс</h2>
-                <form name="search" action="#" method="get">
-                    <input class="medium" type="text" name="q" placeholder="Название компании">
+                <form name="search_by_company" action="/clients/search_by_company" method="post">
+                    <input class="medium" type="text" name="company" placeholder="Название компании" <c:if test="${company != null}"> value="${company}" </c:if>>
                     <button type="submit"> Искать 🔎</button>
                 </form>
             </div>
             <div>
                 <h2>Поиск по персональным данным</h2>
-                <form name="search" action="#" method="get">
+                <form name="search_by_private_information" action="/clients/search_by_private_information" method="post">
                     <label>
                         Фамилия
-                        <input class="medium" type="text" name="q" placeholder="Фамилия">
+                        <input class="medium" type="text" name="lastName" placeholder="Фамилия" <c:if test="${lastName != null}"> value="${lastName}" </c:if>>
                     </label>
                     <label>
                         Имя
-                    <input class="medium" type="text" name="q" placeholder="Имя">
+                    <input class="medium" type="text" name="firstName" placeholder="Имя" <c:if test="${firstName != null}"> value="${firstName}" </c:if>>
                     </label>
                     <label>
                         Отчество
-                    <input class="medium" type="text" name="q" placeholder="Отчество">
+                    <input class="medium" type="text" name="patronymic" placeholder="Отчество" <c:if test="${patronymic != null}"> value="${patronymic}" </c:if>>
                     </label>
                     <label>
                         Адрес
-                    <input class="long" type="text" name="q" placeholder="Адрес">
+                    <input class="long" type="text" name="address" placeholder="Адрес" <c:if test="${address != null}"> value="${address}" </c:if>>
                     </label>
                     <label>
                         Телефон
-                    <input class="short" type="text" name="q" placeholder="Телефон">
+                    <input class="short" type="text" name="telephone" placeholder="Телефон" <c:if test="${telephone != null}"> value="${telephone}" </c:if>>
                     </label>
                     <label>
                         E-mail
-                    <input class="medium" type="text" name="q" placeholder="E-mail">
+                    <input class="medium" type="text" name="email" placeholder="E-mail" <c:if test="${email != null}"> value="${email}" </c:if>>
                     </label>
-                    <label><input type="checkbox" name="q" title="С историей заказов">С историей заказов</label>
+                    <label><input type="checkbox" name="order_history" title="С историей заказов" <c:if test="${order_history != null && order_history.equals(true)}"> checked </c:if>>С историей заказов</label>
                     <br>
                     <button type="submit"> Искать 🔎</button>
                 </form>
