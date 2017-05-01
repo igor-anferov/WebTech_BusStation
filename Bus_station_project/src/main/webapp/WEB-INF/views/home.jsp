@@ -9,20 +9,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
-<head>
-    <link rel="stylesheet" href="<c:url value="/resources/css/styles.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/Oswald.css" />">
-    <title>Информация о рейсах</title>
-</head>
+    <head>
+        <link rel="stylesheet" href="<c:url value="/resources/css/styles.css" />">
+        <link rel="stylesheet" href="<c:url value="/resources/css/Oswald.css" />">
+        <title>Информация о рейсах</title>
+    </head>
 
-<body>
-    <div id="wrapper">
-        <a href="/">
-            <header>
-                <img src="<c:url value="/resources/images/logo.png" />" width="369" height="129" alt="Bus (logo)">
-                <div id="title"><h1>Система управления автобусными рейсами и билетами</h1></div>
-            </header>
-        </a>
+    <body>
+        <%@ include file="header.jsp" %>
         <div id="heading">
             <h1>Информация о рейсах</h1>
         </div>
@@ -53,26 +47,28 @@
                         </c:forEach>
                     </select>
                 </label>
-                <div class="floatleft">
-                    <label>Промежуточные остановки</label>
-                </div>
-                <div class="container">
-                    <c:forEach items="${StationsList}" var="station">
-                        <label>
-                            <input type="checkbox">
-                            ${station.name}
-                        </label>
-                    </c:forEach>
+                <div class="notfloat">
+                    <div class="floatleft">
+                        <label>Промежуточные остановки</label>
+                    </div>
+                    <div class="container">
+                        <c:forEach items="${StationsList}" var="station">
+                            <label>
+                                <input type="checkbox">
+                                ${station.name}
+                            </label>
+                        </c:forEach>
+                    </div>
                 </div>
                 <div class="notfloat">
                     <label>Дата отправления
-                        <input type="date" name="departure_date" title="Дата отправления">
+                        <input class="short" type="date" name="departure_date" placeholder="Любая" title="Дата отправления">
                     </label>
                     <label>Цена до
-                        <input type="number" name="upper_price" placeholder="Без ограничений" title="Цена до">
+                        <input class="short" type="number" name="upper_price" placeholder="Без ограничений" title="Цена до">
                     </label>
                     <label>Количество свободных мест
-                        <input type="number" name="free_places" placeholder="Без ограничений" title="Количество свободных мест">
+                        <input class="short" type="number" name="free_places" placeholder="Без ограничений" title="Количество свободных мест">
                     </label>
                 </div>
                 <br>
@@ -112,13 +108,7 @@
                 </c:forEach>
             </table>
         </section>
-    </div>
-
-    <div id="footer">
-        <div id="copyright">
-            <p>&copy; Анфёров Игорь Сергеевич, ВМК МГУ, 2017 </p>
-        </div>
-    </div>
-</body>
+        <%@ include file="footer.jsp" %>
+    </body>
 
 </html>

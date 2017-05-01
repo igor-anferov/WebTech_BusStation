@@ -52,16 +52,27 @@ public class Clients {
 
 //  Получение списка клиентов, купивших билет на определённый рейс
 
+    public Client getById (Integer id) {
+        String queryText =
+                "SELECT c " +
+                        "FROM Client c " +
+                        "WHERE c.id = " + id;
+
+        return (Client) entityManager.createQuery(queryText).getResultList().get(0);
+    }
+
+//  Получение списка клиентов, купивших билет на определённый рейс
+
 
     public List<Client> getByRun (String run_number) {
         String queryText =
                 "SELECT DISTINCT c " +
-                "FROM Client c " +
-                "JOIN c.orders o " +
-                "JOIN o.part p " +
-                "JOIN p.to s " +
-                "JOIN s.run r " +
-                "WHERE r.number = '" + run_number + "'";
+                        "FROM Client c " +
+                        "JOIN c.orders o " +
+                        "JOIN o.part p " +
+                        "JOIN p.to s " +
+                        "JOIN s.run r " +
+                        "WHERE r.number = '" + run_number + "'";
 
         return entityManager.createQuery(queryText).getResultList();
     }
