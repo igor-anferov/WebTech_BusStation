@@ -29,6 +29,8 @@
                 <li><a href="/">Информация о рейсах</a></li>
                 <li class="active"><a href="/clients">Информация о клиентах</a></li>
                 <li class="active_submenu">Информация о заказах</li>
+                <li><a href="/stations">Информация о станциях</a></li>
+                <li><a href="/companies">Информация о компаниях</a></li>
             </ul>
         </nav>
     </aside>
@@ -50,8 +52,12 @@
             <c:forEach items="${Client.orders}" var="order">
                 <tr>
                     <td>
-                        <button class="edit" title="Редактировать данные" type="submit"> 📝 </button>
-                        <button class="edit" title="Удалить информацию о клиенте" type="submit"> ❌ </button>
+                        <form name="edit_order" id="edit_order_form" action="/clients/orders/edit" method="post">
+                            <button class="edit" title="Редактировать заказ" name="order" value="${order.id}" type="submit"> 📝 </button>
+                        </form>
+                        <form name="remove_order" id="remove_order_form" action="/clients/orders/rm" method="post">
+                            <button class="edit" title="Удалить заказ" name="order" value="${order.id}" type="submit"> ❌ </button>
+                        </form>
                     </td>
                     <td>${order.part.from.run.company.name}</td>
                     <td>${order.part.from.run.number}</td>

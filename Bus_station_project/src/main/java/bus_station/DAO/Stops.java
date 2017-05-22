@@ -1,6 +1,7 @@
 package bus_station.DAO;
 
 import bus_station.Main;
+import bus_station.model.Part;
 import bus_station.model.Stop;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,15 @@ public class Stops {
 
     public Stops(EntityManager entityManager) {
         this.entityManager = entityManager;
+    }
+
+    public Stop getById (Integer id) {
+        String queryText =
+                "SELECT c " +
+                        "FROM Stop c " +
+                        "WHERE c.id = " + id;
+
+        return (Stop) entityManager.createQuery(queryText).getResultList().get(0);
     }
 
     public void add(Stop s) {

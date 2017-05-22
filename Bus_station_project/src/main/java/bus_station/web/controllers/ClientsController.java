@@ -1,6 +1,8 @@
 package bus_station.web.controllers;
 
 import bus_station.DAO.Clients;
+import bus_station.DAO.Orders;
+import bus_station.DAO.Parts;
 import bus_station.model.Client;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,7 +34,8 @@ public class ClientsController {
     }
 
     @RequestMapping(value = "/clients/search_by_run_number", method = RequestMethod.POST)
-    public String search_by_run_number(@RequestParam String run_number, ModelMap model) {
+    public String search_by_run_number(@RequestParam String run_number,
+                                       ModelMap model) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
@@ -48,7 +51,8 @@ public class ClientsController {
     }
 
     @RequestMapping(value = "/clients/search_by_company", method = RequestMethod.POST)
-    public String search_by_company(@RequestParam String company, ModelMap model) {
+    public String search_by_company(@RequestParam String company,
+                                    ModelMap model) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
@@ -70,7 +74,7 @@ public class ClientsController {
                                                 @RequestParam String address,
                                                 @RequestParam String telephone,
                                                 @RequestParam String email,
-                                                Boolean order_history,
+                                                @RequestParam(required = false) Boolean order_history,
                                                 ModelMap model) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
         EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -97,7 +101,8 @@ public class ClientsController {
     }
 
     @RequestMapping(value = "/clients/orders", method = RequestMethod.POST)
-    public String view_orders(@RequestParam Integer client, ModelMap model) {
+    public String view_orders(@RequestParam Integer client,
+                              ModelMap model) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
@@ -109,7 +114,8 @@ public class ClientsController {
     }
 
     @RequestMapping(value = "/clients/rm", method = RequestMethod.POST)
-    public String remove_client(@RequestParam Integer client, ModelMap model) {
+    public String remove_client(@RequestParam Integer client,
+                                ModelMap model) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
@@ -129,8 +135,9 @@ public class ClientsController {
         return "clients/add";
     }
 
-        @RequestMapping(value = "/clients/edit", method = RequestMethod.POST)
-    public String edit_client(@RequestParam Integer client, ModelMap model) {
+    @RequestMapping(value = "/clients/edit", method = RequestMethod.POST)
+    public String edit_client(@RequestParam Integer client,
+                              ModelMap model) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
@@ -202,5 +209,42 @@ public class ClientsController {
         model.addAttribute("ClientsList", clients.list());
 
         return "clients";
+    }
+
+    @RequestMapping(value = "/clients/orders/rm", method = RequestMethod.POST)
+    public String rm_order(Integer order,
+                           ModelMap model) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Clients clients = new Clients(entityManager);
+        Orders orders = new Orders(entityManager);
+
+        model.addAttribute("Client", orders.getById(order).getClient());
+
+        entityManager.getTransaction().begin();
+        orders.remove(orders.getById(order));
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+
+        return "clients/orders";
+    }
+
+    @RequestMapping(value = "/clients/orders/edit", method = RequestMethod.POST)
+    public String edit_order(Integer order,
+                             ModelMap model) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Clients clients = new Clients(entityManager);
+        Orders orders = new Orders(entityManager);
+
+        model.addAttribute("id", order);
+        model.addAttribute("part", orders.getById(order).getPart());
+        model.addAttribute("client", orders.getById(order).getClient().getId());
+        model.addAttribute("num_tickets", orders.getById(order).getCount());
+        model.addAttribute("ClientsList", clients.list());
+
+        return "clients/orders/edit";
     }
 }

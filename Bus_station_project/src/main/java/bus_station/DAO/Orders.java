@@ -1,6 +1,7 @@
 package bus_station.DAO;
 
 import bus_station.Main;
+import bus_station.model.Client;
 import bus_station.model.Order;
 import bus_station.model.Station;
 
@@ -20,6 +21,15 @@ public class Orders {
     public List<Station> list() {
         String queryText = "SELECT o FROM Order o";
         return entityManager.createQuery(queryText).getResultList();
+    }
+
+    public Order getById (Integer id) {
+        String queryText =
+                "SELECT c " +
+                        "FROM Order c " +
+                        "WHERE c.id = " + id;
+
+        return (Order) entityManager.createQuery(queryText).getResultList().get(0);
     }
 
     public void add(Order o) {

@@ -1,6 +1,7 @@
 package bus_station.DAO;
 
 import bus_station.model.Client;
+import bus_station.model.Run;
 
 import javax.persistence.EntityManager;
 
@@ -49,8 +50,6 @@ public class Clients {
     public void remove(Client c) {
         entityManager.remove(c);
     }
-
-//  Получение списка клиентов, купивших билет на определённый рейс
 
     public Client getById (Integer id) {
         String queryText =

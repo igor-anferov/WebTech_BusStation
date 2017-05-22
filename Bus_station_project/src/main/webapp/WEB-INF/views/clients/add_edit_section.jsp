@@ -2,7 +2,7 @@
 
 <section>
     <c:if test="${error != null}">
-        <p class="unfilled_error">Пожалуйста, заполните все обязательные поля!</p>
+        <p class="error">Пожалуйста, заполните все обязательные поля</p>
     </c:if>
     <form name="client_info_edit" action="/clients/edit_done" method="post">
         <label>

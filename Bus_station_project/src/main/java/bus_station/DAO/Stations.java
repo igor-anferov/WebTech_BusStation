@@ -1,6 +1,7 @@
 package bus_station.DAO;
 
 import bus_station.Main;
+import bus_station.model.Client;
 import bus_station.model.Station;
 
 import javax.persistence.EntityManager;
@@ -19,6 +20,15 @@ public class Stations {
     public List<Station> list() {
         String queryText = "SELECT s FROM Station s";
         return entityManager.createQuery(queryText).getResultList();
+    }
+
+    public Station getById (Integer id) {
+        String queryText =
+                "SELECT c " +
+                        "FROM Station c " +
+                        "WHERE c.id = " + id;
+
+        return (Station) entityManager.createQuery(queryText).getResultList().get(0);
     }
 
     public void add(Station s) {

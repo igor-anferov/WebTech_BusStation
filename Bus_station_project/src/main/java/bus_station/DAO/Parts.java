@@ -1,8 +1,10 @@
 package bus_station.DAO;
 
 import bus_station.Main;
+import bus_station.model.Client;
 import bus_station.model.Part;
 import bus_station.model.Station;
+import bus_station.model.Stop;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
@@ -68,9 +70,9 @@ public class Parts {
             else
                 need_AND = true;
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-            queryText += " p.from.departure = '" + df.format(departure) + "'";
+            queryText += " DATE(p.from.departure) = '" + df.format(departure) + "'";
         }
         if (upper_price != null) {
             if (need_AND)
@@ -88,6 +90,28 @@ public class Parts {
         }
 
         return entityManager.createQuery(queryText).getResultList();
+    }
+
+    public Part getById (Integer id) {
+        String queryText =
+                "SELECT c " +
+                        "FROM Part c " +
+                        "WHERE c.id = " + id;
+
+        return (Part) entityManager.createQuery(queryText).getResultList().get(0);
+    }
+
+    public Part getByStops (Stop from, Stop to) {
+        String queryText =
+                "SELECT p " +
+                        "FROM Part p " +
+                        "WHERE p.from.id = " + from.getId() + " AND " +
+                              "p.to.id = " + to.getId();
+
+        List<Part> res = entityManager.createQuery(queryText).getResultList();
+        if (res.isEmpty())
+            return null;
+        return res.get(0);
     }
 
     public void add(Part p) {

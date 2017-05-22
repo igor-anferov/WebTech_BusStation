@@ -24,6 +24,15 @@ public class Runs {
         return entityManager.createQuery(queryText).getResultList();
     }
 
+    public Run getById (Integer id) {
+        String queryText =
+                "SELECT c " +
+                        "FROM Run c " +
+                        "WHERE c.id = " + id;
+
+        return (Run) entityManager.createQuery(queryText).getResultList().get(0);
+    }
+
     public void add(Run r) {
         r.getCompany().addRun(r);
         entityManager.persist(r);

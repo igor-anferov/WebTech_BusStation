@@ -25,7 +25,10 @@
                 <ul class="aside-menu">
                     <li><a href="/">Информация о рейсах</a></li>
                     <li class="active"><a href="/clients">Информация о клиентах</a></li>
+                    <li class="submenu"><a href="/clients/add">Добавление клиента</a></li>
                     <li class="active_submenu">Результаты поиска</li>
+                    <li><a href="/stations">Информация о станциях</a></li>
+                    <li><a href="/companies">Информация о компаниях</a></li>
                 </ul>
             </nav>
         </aside>

@@ -12,28 +12,26 @@
     <head>
         <link rel="stylesheet" href="<c:url value="/resources/css/styles.css" />">
         <link rel="stylesheet" href="<c:url value="/resources/css/Oswald.css" />">
-        <title>Информация о клиентах</title>
+        <title>Информация о рейсах</title>
     </head>
 
     <body>
         <%@ include file="header.jsp" %>
         <div id="heading">
-            <h1>Информация о клиентах</h1>
+            <h1>Информация о рейсах</h1>
         </div>
         <aside>
             <nav>
                 <ul class="aside-menu">
-                    <li><a href="/">Информация о рейсах</a></li>
-                    <li class="active">Информация о клиентах</li>
-                    <li class="submenu"><a href="/clients/add">Добавление клиента</a></li>
+                    <li class="active">Информация о рейсах</li>
+                    <li><a href="/clients">Информация о клиентах</a></li>
                     <li><a href="/stations">Информация о станциях</a></li>
                     <li><a href="/companies">Информация о компаниях</a></li>
                 </ul>
             </nav>
         </aside>
-        <%@ include file="clients/section.jsp" %>
+        <%@ include file="runs/section.jsp" %>
         <%@ include file="footer.jsp" %>
     </body>
 
 </html>
-
