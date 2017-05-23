@@ -35,10 +35,10 @@
                 <input class="short" type="date" name="departure_date" placeholder="Любая" title="Дата отправления" <c:if test="${departure_date != null}">value="${departure_date}"</c:if> >
             </label>
             <label>Цена до
-                <input class="short" type="number" name="upper_price" placeholder="Без ограничений" title="Цена до" <c:if test="${upper_price != null}">value="${upper_price}"</c:if> >
+                <input class="short" type="number" min="0" step="1" name="upper_price" placeholder="Без ограничений" title="Цена до" <c:if test="${upper_price != null}">value="${upper_price}"</c:if> >
             </label>
             <label>Количество свободных мест
-                <input class="short" type="number" name="free_places" placeholder="Без ограничений" title="Количество свободных мест" <c:if test="${free_places != null}">value="${free_places}"</c:if> >
+                <input class="short" type="number" min="0" step="1" name="free_places" placeholder="Без ограничений" title="Количество свободных мест" <c:if test="${free_places != null}">value="${free_places}"</c:if> >
             </label>
         </div>
         <br>

@@ -20,10 +20,15 @@ import java.io.Serializable;
         "            AND ShortSubPartFromStop.Departure >= LongPartFromStop.Departure\n" +
         "            AND ShortSubPartToStop.Arrival <= LongPartToStop.Arrival\n" +
         "            AND NOT EXISTS ( SELECT *\n" +
-        "                             FROM Stops\n" +
-        "                             WHERE Stops.run = Runs.run\n" +
-        "                                    AND Stops.Arrival < ShortSubPartToStop.Arrival\n" +
-        "                                    AND Stops.Departure > ShortSubPartFromStop.Departure\n" +
+        "                             FROM Parts JOIN\n" +
+        "                                  Stops as fromStop JOIN\n" +
+        "                                  Stops as toStop ON\n" +
+        "                                      Parts.From_ = fromStop.Stop_\n" +
+        "                                      AND Parts.To_ = toStop.Stop_\n" +
+        "                             WHERE fromStop.run = Runs.run\n" +
+        "                                    AND toStop.Arrival <= ShortSubPartToStop.Arrival\n" +
+        "                                    AND fromStop.Departure >= ShortSubPartFromStop.Departure\n" +
+        "                                    AND Parts.Part != ShortSubPart.Part\n" +
         "                           )\n" +
         "        LEFT JOIN (SELECT Parts.Part, SUM(IFNULL(Count, 0)) as Taken\n" +
         "                FROM Runs JOIN\n" +

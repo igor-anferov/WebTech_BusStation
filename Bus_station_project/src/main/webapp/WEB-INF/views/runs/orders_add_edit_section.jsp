@@ -2,7 +2,13 @@
 
 <section>
     <h2>
+        Рейс ${part.from.run.number}
+    </h2>
+    <h2>
         ${part.from.station.name} (${part.from.departure}) — ${part.to.station.name} (${part.to.arrival})
+    </h2>
+    <h2>
+        Цена билета: ${part.price}
     </h2>
     <c:if test="${error_unfilled != null}">
         <p class="error">Пожалуйста, заполните все обязательные поля</p>
@@ -24,7 +30,7 @@
             </select>
         </label>
         <label>Количество билетов
-            <input class="medium" type="number" name="num_tickets" placeholder="Введите количество приобретаемых билетов" title="Количество билетов" <c:if test="${num_tickets != null}">value="${num_tickets}"</c:if> >
+            <input class="medium" type="number" min="1" step="1" name="num_tickets" placeholder="Введите количество приобретаемых билетов" title="Количество билетов" <c:if test="${num_tickets != null}">value="${num_tickets}"</c:if> >
         </label>
         <br>
         <button type="submit" <c:if test="${id != null}">name="id" value="${id}" </c:if>> Готово ✅</button>

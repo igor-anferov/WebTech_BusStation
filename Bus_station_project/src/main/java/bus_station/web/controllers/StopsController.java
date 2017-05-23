@@ -72,6 +72,20 @@ public class StopsController {
         return "/runs/info";
     }
 
+    @RequestMapping(value = "/runs/stops/add", method = RequestMethod.POST)
+    public String add_stop(@RequestParam Integer run_id,
+                           Model model) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "bus_station.jpa" );
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Stations stations = new Stations(entityManager);
+
+        model.addAttribute("run_id", run_id);
+        model.addAttribute("StationsList", stations.list());
+
+        return "/runs/stops/add";
+    }
+
     @RequestMapping(value = "/runs/stops/edit", method = RequestMethod.POST)
     public String edit_stop(@RequestParam Integer stop_id,
                             @RequestParam Integer run_id,
@@ -167,7 +181,10 @@ public class StopsController {
 
         if (station == null || (check_arrival && arr_date == null) || (check_departure && dep_date == null)) {
             model.addAttribute("error_unfilled", true);
-            return "/runs/stops/edit";
+            if (stop_id == null)
+                return "/runs/stops/add";
+            else
+                return "/runs/stops/edit";
         }
 
         if (stop_id == null) {
@@ -179,7 +196,10 @@ public class StopsController {
             } catch (Exception e) {
                 entityManager.getTransaction().rollback();
                 model.addAttribute("error_wrong_timeline", true);
-                return "/runs/stops/edit";
+                if (stop_id == null)
+                    return "/runs/stops/add";
+                else
+                    return "/runs/stops/edit";
             }
         } else {
             try {
@@ -193,7 +213,10 @@ public class StopsController {
             } catch (Exception e) {
                 entityManager.getTransaction().rollback();
                 model.addAttribute("error_wrong_timeline", true);
-                return "/runs/stops/edit";
+                if (stop_id == null)
+                    return "/runs/stops/add";
+                else
+                    return "/runs/stops/edit";
             }
         }
 

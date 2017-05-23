@@ -1,15 +1,13 @@
 package bus_station.web.controllers;
 
 import bus_station.DAO.*;
-import bus_station.model.Order;
-import bus_station.model.Part;
-import bus_station.model.Station;
-import bus_station.model.Stop;
+import bus_station.model.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -236,5 +234,246 @@ public class RunsController {
 
             return "clients/orders";
         }
+    }
+
+    @RequestMapping(value = "/runs/rm", method = RequestMethod.POST)
+    public String remove_run(@RequestParam Integer run_id,
+                              ModelMap model) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("bus_station.jpa");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Runs runs = new Runs(entityManager);
+
+        entityManager.getTransaction().begin();
+        runs.remove(runs.getById(run_id));
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/runs/add", method = RequestMethod.GET)
+    public String add_run(ModelMap model) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("bus_station.jpa");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Companies companies = new Companies(entityManager);
+
+        model.addAttribute("CompaniesList", companies.list());
+
+        return "/runs/add";
+    }
+
+    @RequestMapping(value = "/runs/edit", method = RequestMethod.POST)
+    public String edit_run(@RequestParam Integer run_id,
+            ModelMap model) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("bus_station.jpa");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Runs runs = new Runs(entityManager);
+        Companies companies = new Companies(entityManager);
+
+        Run r = runs.getById(run_id);
+
+        model.addAttribute("run_id", run_id);
+        model.addAttribute("company", r.getCompany().getId());
+        model.addAttribute("CompaniesList", companies.list());
+        model.addAttribute("run_number", r.getNumber());
+        model.addAttribute("bus_capacity", r.getBusCapacity());
+
+        return "/runs/edit";
+    }
+
+    @RequestMapping(value = "/runs/edit_done", method = RequestMethod.POST)
+    public String run_edit_done(@RequestParam(required = false) Integer run_id,
+                                @RequestParam(required = false) Integer company,
+                                @RequestParam(required = false) String run_number,
+                                @RequestParam(required = false) Integer bus_capacity,
+                                @RequestParam(required = false) Integer stops_count,
+                                ModelMap model,
+                                RedirectAttributes redirectAttributes) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("bus_station.jpa");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Runs runs = new Runs(entityManager);
+        Companies companies = new Companies(entityManager);
+        Stations stations = new Stations(entityManager);
+
+        if (run_number.equals("")) {
+            run_number = null;
+        }
+
+        model.addAttribute("run_id", run_id);
+        model.addAttribute("company", company);
+        model.addAttribute("CompaniesList", companies.list());
+        model.addAttribute("run_number", run_number);
+        model.addAttribute("bus_capacity", bus_capacity);
+        model.addAttribute("stops_count", stops_count);
+
+        if (company == null || run_number == null || bus_capacity == null || (run_id == null && stops_count == null) ) {
+            model.addAttribute("error_unfilled", true);
+            if (run_id == null)
+                return "runs/add";
+            else
+                return "runs/edit";
+        }
+
+        if (run_id != null) {
+            Run r = runs.getById(run_id);
+            entityManager.getTransaction().begin();
+            r.setCompany(companies.getById(company));
+            entityManager.flush();
+            entityManager.getTransaction().commit();
+            try {
+                entityManager.getTransaction().begin();
+                r.setNumber(run_number);
+                entityManager.flush();
+                entityManager.getTransaction().commit();
+            } catch (Exception e) {
+                entityManager.getTransaction().rollback();
+                model.addAttribute("error_duplicate_number", true);
+                return "runs/edit";
+            }
+            try {
+                entityManager.getTransaction().begin();
+                r.setBusCapacity(bus_capacity);
+                entityManager.flush();
+                entityManager.getTransaction().commit();
+            } catch (Exception e) {
+                entityManager.getTransaction().rollback();
+                model.addAttribute("error_low_bus_capacity", true);
+                return "runs/edit";
+            }
+            redirectAttributes.addAttribute("run", run_id);
+            return "redirect:/runs/info";
+        } else {
+            if (bus_capacity < 0) {
+                model.addAttribute("error_negative_bus_capacity", true);
+                return "runs/add";
+            }
+            if (stops_count < 2) {
+                model.addAttribute("error_low_stops_count", true);
+                return "runs/add";
+            }
+            Run r = new Run(run_number, companies.getById(company), bus_capacity);
+            try {
+                entityManager.getTransaction().begin();
+                runs.add(r);
+                entityManager.flush();
+                entityManager.getTransaction().commit();
+                model.addAttribute("run_id", r.getId());
+            } catch (Exception e) {
+                entityManager.getTransaction().rollback();
+                model.addAttribute("error_duplicate_number", true);
+                return "runs/add";
+            }
+            model.addAttribute("stationsList", stations.list());
+            return "runs/set_stops";
+        }
+    }
+
+    @RequestMapping(value = "/runs/stops_set", method = RequestMethod.POST)
+    public String stops_set(@RequestParam Integer run_id,
+                            @RequestParam Integer stops_count,
+                            @RequestParam(required = false) List<Integer> selectedStations,
+                            @RequestParam(required = false) List<String> arrival,
+                            @RequestParam(required = false) List<String> departure,
+                            ModelMap model,
+                            RedirectAttributes redirectAttributes) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("bus_station.jpa");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        Runs runs = new Runs(entityManager);
+        Stops stops = new Stops(entityManager);
+        Stations stations = new Stations(entityManager);
+
+        model.addAttribute("run_id", run_id);
+        model.addAttribute("stops_count", stops_count);
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.ENGLISH);
+        df.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+
+        boolean unfilled = false;
+
+        for (Integer station : selectedStations) {
+            if (station == null) {
+                unfilled = true;
+                break;
+            }
+        }
+
+        for (int i = 0; i < arrival.size(); i++) {
+            if (arrival.get(i) == null) {
+                unfilled = true;
+            } else {
+                try {
+                    df.parse(arrival.get(i));
+                } catch (ParseException e) {
+                    arrival.set(i, null);
+                    unfilled = true;
+                }
+            }
+        }
+
+        for (int i = 0; i < departure.size(); i++) {
+            if (departure.get(i) == null) {
+                unfilled = true;
+            } else {
+                try {
+                    df.parse(departure.get(i));
+                } catch (ParseException e) {
+                    departure.set(i, null);
+                    unfilled = true;
+                }
+            }
+        }
+
+        if (unfilled) {
+            model.addAttribute("selectedStations", selectedStations);
+            model.addAttribute("arrival", arrival);
+            model.addAttribute("departure", departure);
+            model.addAttribute("stationsList", stations.list());
+            model.addAttribute("error_unfilled", true);
+            return "runs/set_stops";
+        }
+
+        try {
+            entityManager.getTransaction().begin();
+
+            Run run = runs.getById(run_id);
+
+            for (int i = 0; i < selectedStations.size(); i++) {
+                Station station = stations.getById(selectedStations.get(i));
+                Date arr_date;
+                try {
+                    arr_date = df.parse(arrival.get(i-1));
+                } catch (Exception e) {
+                    arr_date = null;
+                }
+                Date dep_date;
+                try {
+                    dep_date = df.parse(departure.get(i));
+                } catch (Exception e) {
+                    dep_date = null;
+                }
+
+                stops.add(new Stop(run, station, arr_date, dep_date));
+            }
+
+            entityManager.flush();
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            model.addAttribute("selectedStations", selectedStations);
+            model.addAttribute("arrival", arrival);
+            model.addAttribute("departure", departure);
+            model.addAttribute("stationsList", stations.list());
+            model.addAttribute("error_wrong_timeline", true);
+            return "runs/set_stops";
+        }
+
+        redirectAttributes.addAttribute("adding", true);
+        redirectAttributes.addAttribute("run_id", run_id);
+        return "redirect:/runs/parts/edit";
     }
 }

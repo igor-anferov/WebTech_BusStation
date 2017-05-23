@@ -24,6 +24,7 @@
             <nav>
                 <ul class="aside-menu">
                     <li class="active">Информация о рейсах</li>
+                    <li class="submenu"><a href="/runs/add">Добавление рейса</a></li>
                     <li><a href="/clients">Информация о клиентах</a></li>
                     <li><a href="/stations">Информация о станциях</a></li>
                     <li><a href="/companies">Информация о компаниях</a></li>

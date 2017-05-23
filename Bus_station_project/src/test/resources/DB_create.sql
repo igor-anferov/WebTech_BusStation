@@ -37,9 +37,7 @@ CREATE TABLE Stops(
     Station INTEGER NOT NULL REFERENCES Stations(Station) ON DELETE CASCADE ON UPDATE CASCADE,
     Arrival DATETIME NULL,
     Departure DATETIME NULL,
-    
-    UNIQUE (Run, Station),
-    
+
     CHECK (Departure IS NULL OR Arrival IS NULL OR Departure > Arrival)
 );
 
@@ -103,24 +101,24 @@ BEGIN
     IF EXISTS (
         SELECT *
         FROM Stops s
-			 CROSS JOIN Stops s2 ON
-			 NEW.Run = s.Run AND
+             CROSS JOIN Stops s2 ON
+             NEW.Run = s.Run AND
              NEW.Run = s2.Run AND
              s.stop_ != s2.stop_
               AND (
-				  s.Arrival IS NULL AND s2.Arrival <= s.Departure OR
+                  s.Arrival IS NULL AND s2.Arrival <= s.Departure OR
 
-				  s.Departure IS NULL AND s2.Departure >= s.Arrival OR
+                  s.Departure IS NULL AND s2.Departure >= s.Arrival OR
 
-				  s2.Arrival IS NULL AND s.Arrival <= s2.Departure OR
+                  s2.Arrival IS NULL AND s.Arrival <= s2.Departure OR
 
-				  s2.Departure IS NULL AND s.Departure >= s2.Arrival OR
+                  s2.Departure IS NULL AND s.Departure >= s2.Arrival OR
 
-				  s.Arrival IS NOT NULL AND s.Departure IS NOT NULL AND s2.Arrival IS NOT NULL AND s2.Departure IS NOT NULL AND
-				  (
-							  s2.Arrival between s.Arrival AND s.Departure OR
-							  s.Arrival between s2.Arrival AND s2.Departure
-				  )
+                  s.Arrival IS NOT NULL AND s.Departure IS NOT NULL AND s2.Arrival IS NOT NULL AND s2.Departure IS NOT NULL AND
+                  (
+                              s2.Arrival between s.Arrival AND s.Departure OR
+                              s.Arrival between s2.Arrival AND s2.Departure
+                  )
               )
     ) THEN
         SIGNAL SQLSTATE '11111';
@@ -255,10 +253,15 @@ FROM Runs
             AND ShortSubPartFromStop.Departure >= LongPartFromStop.Departure
             AND ShortSubPartToStop.Arrival <= LongPartToStop.Arrival
             AND NOT EXISTS ( SELECT *
-                             FROM Stops
-                             WHERE Stops.run = Runs.run
-                                    AND Stops.Arrival < ShortSubPartToStop.Arrival
-                                    AND Stops.Departure > ShortSubPartFromStop.Departure
+                             FROM Parts JOIN
+                                  Stops as fromStop JOIN
+                                  Stops as toStop ON
+                                      Parts.From_ = fromStop.Stop_
+                                      AND Parts.To_ = toStop.Stop_
+                             WHERE fromStop.run = Runs.run
+                                    AND toStop.Arrival <= ShortSubPartToStop.Arrival
+                                    AND fromStop.Departure >= ShortSubPartFromStop.Departure
+                                    AND Parts.Part != ShortSubPart.Part
                            )
         LEFT JOIN (SELECT Parts.Part, SUM(IFNULL(Count, 0)) as Taken
                 FROM Runs JOIN
@@ -302,6 +305,21 @@ BEGIN
     WHERE Part = new.Part;
                 
     IF ( x < new.Count-old.Count ) THEN
+        SIGNAL SQLSTATE '44444';
+    END IF;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER BusOverflow_on_Bus_Capacity_Update
+AFTER UPDATE ON Runs
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT *
+		FROM Parts_with_free_space
+		WHERE Free < 0
+    ) THEN
         SIGNAL SQLSTATE '44444';
     END IF;
 END//

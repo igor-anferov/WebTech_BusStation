@@ -24,6 +24,7 @@
             <nav>
                 <ul class="aside-menu">
                     <li class="active"><a href="/">Информация о рейсах</a></li>
+                    <li class="submenu"><a href="/runs/add">Добавление рейса</a></li>
                     <li><a href="/clients">Информация о клиентах</a></li>
                     <li><a href="/stations">Информация о станциях</a></li>
                     <li><a href="/companies">Информация о компаниях</a></li>
@@ -31,6 +32,15 @@
             </nav>
         </aside>
         <section>
+            <h2>Компания: ${run.company.name}</h2>
+            <h2>Номер рейса: ${run.number}</h2>
+            <h2>Вместимость автобуса: ${run.busCapacity}</h2>
+            <form name="edit_run" id="edit_run_form" action="/runs/edit" method="post">
+                <button class="single_edit" title="Изменить информацию о рейсе" name="run_id" value="${run.id}" type="submit">Изменить информацию о рейсе</button>
+            </form>
+            <form name="remove_run" id="remove_run_form" action="/runs/rm" method="post">
+                <button class="single_rm" title="Удалить рейс" name="run_id" value="${run.id}" type="submit">Удалить рейс</button>
+            </form>
             <h2>Маршрут</h2>
             <table class="autowidth" border="1">
                 <tr>
@@ -58,6 +68,9 @@
                     </tr>
                 </c:forEach>
             </table>
+            <form name="add_stop" id="add_stop_form" action="/runs/stops/add" method="post">
+                <button class="add" title="Добавить остановку" name="run_id" value="${run.id}" type="submit">Добавить остановку</button>
+            </form>
 
             <h2>Доступность и стоимость билетов</h2>
             <table class="autowidth" border="1">
@@ -72,19 +85,20 @@
                         <th>${stop.station.name}</th>
                     </c:forEach>
                 </tr>
-                <c:forEach items="${PartsTable}" var="table_i">
+                <c:forEach var = "i" begin = "0" end = "${StopsList.size()-1}">
                     <tr>
-                        <th>${StopsList.get(PartsTable.indexOf(table_i)).station.name}</th>
-                        <c:forEach items="${table_i}" var="part">
-                            <td <c:if test="${part.price == null}"> class="passive" </c:if> >${part.price}</td>
+                        <th>${StopsList.get(i).station.name}</th>
+                        <c:forEach var = "j" begin = "0" end = "${StopsList.size()-1}">
+                            <td <c:if test="${i>=j}"> class="passive" </c:if> >${PartsTable.get(i).get(j).price}</td>
                         </c:forEach>
                     </tr>
                 </c:forEach>
             </table>
+            <form name="edit_parts" id="edit_parts_form" action="/runs/parts/edit" method="post">
+                <button class="single_edit" title="Изменить доступность частей маршрута и стоимость билетов" name="run_id" value="${run.id}" type="submit">Изменить доступность частей маршрута и стоимость билетов</button>
+            </form>
 
         </section>
         <%@ include file="../footer.jsp" %>
     </body>
-
 </html>
-
