@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>Runs searching and buying tickets</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Runs searching and buying tickets</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=departure_point</td>
+	<td>label=Москва</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>document.search.intermediate_point[11]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[5]</td>
+	<td>Краснодар</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[5]</td>
+	<td>Сочи</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[4]/td[5]</td>
+	<td>Сочи</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=free_places</td>
+	<td>20</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[5]</td>
+	<td>Сочи</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=header</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=departure_date</td>
+	<td>2017-05-23</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=upper_price</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=upper_price</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=upper_price</td>
+	<td>5</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=upper_price</td>
+	<td>1000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=free_places</td>
+	<td>10</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[3]</td>
+	<td>Санкт-Петербург</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[2]</td>
+	<td>NEW-1</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[7]</td>
+	<td>1000.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[8]</td>
+	<td>50</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=form[name=&quot;buy_part&quot;] &gt; button[name=&quot;run&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=client</td>
+	<td>label=Анфёров Игорь Сергеевич</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=num_tickets</td>
+	<td>60</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=p.error</td>
+	<td>Выбранное Вами количество билетов недоступно</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=num_tickets</td>
+	<td>50</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=departure_date</td>
+	<td>2017-05-23</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[4]/td[3]</td>
+	<td>Москва</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[4]/td[5]</td>
+	<td>Сочи</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[4]/td[8]</td>
+	<td>50</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

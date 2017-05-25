@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>Client adding and search testing</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Client adding and search testing</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/clients</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Добавление клиента</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=lastName</td>
+	<td>Анфёров</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=firstName</td>
+	<td>Игорь</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=patronymic</td>
+	<td>Сергеевич</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=address</td>
+	<td>Ломоносовский пр-т, 27к11</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=telephone</td>
+	<td>+79996662401</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=p.error</td>
+	<td>Пожалуйста, заполните все обязательные поля</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=email</td>
+	<td>igor-anferov@mail.ru</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[2]</td>
+	<td>Анфёров</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[3]</td>
+	<td>Игорь</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[4]</td>
+	<td>Сергеевич</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[5]</td>
+	<td>Ломоносовский пр-т, 27к11</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[6]</td>
+	<td>+79996662401</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[7]</td>
+	<td>igor-anferov@mail.ru</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=run_number</td>
+	<td>AB-379</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[2]</td>
+	<td>Меркушева</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[2]</td>
+	<td>Сторожева</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=company</td>
+	<td>Мосгортранс</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=form[name=&quot;search_by_company&quot;] &gt; button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[2]</td>
+	<td>Меркушева</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[2]</td>
+	<td>Нечаева</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[4]/td[2]</td>
+	<td>Антипов</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[5]/td[2]</td>
+	<td>Плотников</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[6]/td[2]</td>
+	<td>Сторожева</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=firstName</td>
+	<td>Татьяна</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=form[name=&quot;search_by_private_information&quot;] &gt; button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[2]</td>
+	<td>Меркушева</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[2]</td>
+	<td>Нечаева</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//button[@name='client'])[6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#remove_order_form &gt; button[name=&quot;order&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#remove_order_form &gt; button[name=&quot;order&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#remove_order_form &gt; button[name=&quot;order&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#remove_order_form &gt; button[name=&quot;order&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Информация о клиентах</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=firstName</td>
+	<td>Татьяна</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=order_history</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=form[name=&quot;search_by_private_information&quot;] &gt; button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[2]</td>
+	<td>Меркушева</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

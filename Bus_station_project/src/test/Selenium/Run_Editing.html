@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>Run Editing</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Run Editing</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=run</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#add_stop_form &gt; button[name=&quot;run_id&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=station</td>
+	<td>label=Владимир</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=arrival</td>
+	<td>2017-05-23T15:00</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=departure</td>
+	<td>2017-05-23T15:30</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=p.error</td>
+	<td>Некорректно указан временной интервал</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=arrival</td>
+	<td>2017-02-28T11:00</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=departure</td>
+	<td>2017-02-28T11:30</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[3]/td[2]</td>
+	<td>Владимир</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#edit_parts_form &gt; button[name=&quot;run_id&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=priceList</td>
+	<td>400</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=run_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//table[2]/tbody/tr[2]/td[2]</td>
+	<td>400.00</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=header</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[103]/td[5]</td>
+	<td>Владимир</td>
+</tr>
+</tbody></table>
+</body>
+</html>

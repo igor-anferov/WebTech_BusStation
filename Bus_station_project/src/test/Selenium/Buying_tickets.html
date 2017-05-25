@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>Buying tickets</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Buying tickets</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=form[name=&quot;buy_part&quot;] &gt; button[name=&quot;run&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=h2</td>
+	<td>Рейс AB-379</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//h2[2]</td>
+	<td>Москва (2017-02-28 09:00:00.0) — Тверь (2017-02-28 12:00:00.0)</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//h2[3]</td>
+	<td>Цена билета: 600.00</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=client</td>
+	<td>label=Меркушева Татьяна Сергеевна</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=num_tickets</td>
+	<td>5</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=p.error</td>
+	<td>Выбранное Вами количество билетов недоступно</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=num_tickets</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=num_tickets</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=num_tickets</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[8]</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[4]/td[8]</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//tr[6]/td[8]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Информация о клиентах</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//button[@name='client'])[6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='wrapper']/section/table/tbody/tr[6]/td[4]</td>
+	<td>Москва</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='wrapper']/section/table/tbody/tr[6]/td[6]</td>
+	<td>Тверь</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='wrapper']/section/table/tbody/tr[6]/td[8]</td>
+	<td>600.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='wrapper']/section/table/tbody/tr[6]/td[9]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='wrapper']/section/table/tbody/tr[6]/td[10]</td>
+	<td>1200.00</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
